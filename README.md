@@ -21,8 +21,8 @@ Creates new user
 ##### Example Input: 
 ```
 {
-	"username": "UncleBob",
-	"password": "cleanArch"
+	"username": "andrii",
+	"password": "password"
 } 
 ```
 
@@ -34,8 +34,8 @@ Request to get JWT Token based on user credentials
 ##### Example Input: 
 ```
 {
-	"username": "UncleBob",
-	"password": "cleanArch"
+	"username": "andrii",
+	"password": "password"
 } 
 ```
 

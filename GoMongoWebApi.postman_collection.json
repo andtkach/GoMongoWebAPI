@@ -1,0 +1,226 @@
+{
+	"info": {
+		"_postman_id": "d23fb06e-b0dd-4cf1-a02a-f66a5dfee750",
+		"name": "GoMongoWebApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4739683"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"andrii\",\r\n\t\"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/auth/sign-up",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"auth",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"andrii\",\r\n\t\"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/auth/sign-in",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"auth",
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Bookmarks",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/api/bookmarks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"bookmarks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Bookmark",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"url\": \"https://github.com/andtkach\",\r\n\t\"title\": \"Go Clean Architecture example\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/bookmarks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"bookmarks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Bookmark",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"64a58565c01c835a1c5fb3ac\",\r\n\t\"url\": \"https://github.com/andtkach UPDATE\",\r\n\t\"title\": \"Go Clean Architecture example UPDATE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/bookmarks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"bookmarks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Bookmark",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/api/bookmarks/64a58565c01c835a1c5fb3ac",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"bookmarks",
+						"64a58565c01c835a1c5fb3ac"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Bookmark",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"id\": \"64a58565c01c835a1c5fb3ac\"\r\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/bookmarks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"bookmarks"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

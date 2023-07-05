@@ -1,12 +1,14 @@
 port: 8000
 
 auth:
-  hash_salt: "hash_salt"
-  signing_key: "signing_key"
+  hash_salt: "some-hash"
+  signing_key: "some-signing-key"
   token_ttl: 86400
 
 mongo:
-  uri: "mongodb://mongodb:27017"
+  # uri: "mongodb://mongodb:27027"
+  # uri: "mongodb://localhost:27027"
+  uri: "mongodb://host.docker.internal:27027"
   name: "testdb"
   user_collection: "users"
   bookmark_collection: "bookmarks"

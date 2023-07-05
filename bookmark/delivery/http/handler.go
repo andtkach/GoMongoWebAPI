@@ -1,11 +1,12 @@
 package http
 
 import (
+	"net/http"
+
 	"github.com/andtkach/gomongowebapi/auth"
 	"github.com/andtkach/gomongowebapi/bookmark"
 	"github.com/andtkach/gomongowebapi/models"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type Bookmark struct {
@@ -64,6 +65,31 @@ func (h *Handler) Get(c *gin.Context) {
 	})
 }
 
+type getOneInput struct {
+	ID string `json:"id"`
+}
+
+type getOneResponse struct {
+	Bookmark *Bookmark `json:"bookmark"`
+}
+
+func (h *Handler) GetOne(c *gin.Context) {
+
+	id := c.Param("id")
+
+	user := c.MustGet(auth.CtxUserKey).(*models.User)
+
+	bm, err := h.useCase.GetBookmark(c.Request.Context(), user, id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.JSON(http.StatusOK, &getOneResponse{
+		Bookmark: toBookmark(bm),
+	})
+}
+
 type deleteInput struct {
 	ID string `json:"id"`
 }
@@ -78,6 +104,29 @@ func (h *Handler) Delete(c *gin.Context) {
 	user := c.MustGet(auth.CtxUserKey).(*models.User)
 
 	if err := h.useCase.DeleteBookmark(c.Request.Context(), user, inp.ID); err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
+
+type updateInput struct {
+	ID    string `json:"id"`
+	URL   string `json:"url"`
+	Title string `json:"title"`
+}
+
+func (h *Handler) Update(c *gin.Context) {
+	inp := new(updateInput)
+	if err := c.BindJSON(inp); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	user := c.MustGet(auth.CtxUserKey).(*models.User)
+
+	if err := h.useCase.UpdateBookmark(c.Request.Context(), user, inp.ID, inp.URL, inp.Title); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}

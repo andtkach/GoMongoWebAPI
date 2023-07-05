@@ -3,8 +3,8 @@ version: '3.4'
 services:
 
   server:
-    image: go-clean-architecture
-    container_name: "go-clean-architecture"
+    image: go-mongo-api
+    container_name: "go-mongo-api"
     build: ./
     command: ./app
     ports:
@@ -22,5 +22,5 @@ services:
     volumes:
       - ./.data/db:/data/db
     ports:
-      - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
+      - 27027:27017
+    command: mongod --logpath=/dev/null # --quiet

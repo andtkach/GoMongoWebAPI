@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+
 	"github.com/andtkach/gomongowebapi/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -66,6 +67,57 @@ func (r BookmarkRepository) GetBookmarks(ctx context.Context, user *models.User)
 	}
 
 	return toBookmarks(out), nil
+}
+
+func (r BookmarkRepository) GetBookmark(ctx context.Context, user *models.User, id string) (*models.Bookmark, error) {
+
+	objID, _ := primitive.ObjectIDFromHex(id)
+	uID, _ := primitive.ObjectIDFromHex(user.ID)
+
+	bookmark := new(Bookmark)
+
+	err := r.db.FindOne(ctx, bson.M{"_id": objID, "userId": uID}).Decode(bookmark)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return toBookmark(bookmark), nil
+}
+
+func (r BookmarkRepository) UpdateBookmark(ctx context.Context, user *models.User, bm *models.Bookmark) error {
+
+	objID, _ := primitive.ObjectIDFromHex(bm.ID)
+	uID, _ := primitive.ObjectIDFromHex(user.ID)
+
+	bookmark := new(Bookmark)
+
+	err := r.db.FindOne(ctx, bson.M{"_id": objID, "userId": uID}).Decode(bookmark)
+
+	if err != nil {
+		return err
+	}
+
+	toBookmark(bookmark)
+
+	bookmark.Title = bm.Title
+	bookmark.URL = bm.URL
+
+	update := bson.D{
+		{Key: "$set",
+			Value: bson.D{
+				{Key: "title", Value: bookmark.Title},
+				{Key: "url", Value: bookmark.URL},
+			},
+		},
+	}
+
+	_, err = r.db.UpdateOne(ctx, bson.M{"_id": objID, "userId": uID}, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r BookmarkRepository) DeleteBookmark(ctx context.Context, user *models.User, id string) error {
