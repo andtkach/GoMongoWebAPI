@@ -5,3 +5,5 @@ WORKDIR /root/
 
 COPY ./.bin/app .
 COPY ./config/ ./config/
+
+CMD [ "/root/app" ]

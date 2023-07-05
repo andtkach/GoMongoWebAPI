@@ -1,4 +1,4 @@
-port: 8000
+port: 80
 
 auth:
   hash_salt: "some-hash"
@@ -8,7 +8,8 @@ auth:
 mongo:
   # uri: "mongodb://mongodb:27027"
   # uri: "mongodb://localhost:27027"
-  uri: "mongodb://host.docker.internal:27027"
+  # uri: "mongodb://host.docker.internal:27027"
+  uri: mongodb+srv://user:4Nu0Bz3F633hgZUX@cluster0.fqzualv.mongodb.net/
   name: "testdb"
   user_collection: "users"
   bookmark_collection: "bookmarks"

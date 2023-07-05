@@ -75,6 +75,35 @@ Returns all user bookmarks
 } 
 ```
 
+### GET /api/bookmarks/:id
+
+Returns one bookmark
+
+##### Example Response: 
+```
+{
+	"bookmark":
+			{
+                "id": "5da2d8aae9b63715ddfae856",
+                "url": "https://github.com/andtkach/gomongowebapi",
+                "title": "Go Clean Architecture example"
+            }
+} 
+```
+
+### PUT /api/bookmarks
+
+Updates bookmark
+
+##### Example Input: 
+```
+{
+	"id": "5da2d8aae9b63715ddfae856",
+	"url": "https://github.com/andtkach",
+	"title": "Go Clean Architecture example"
+} 
+```
+
 ### DELETE /api/bookmarks
 
 Deletes bookmark by ID:
@@ -97,3 +126,11 @@ Use ```make run``` to build and run docker containers with application itself an
 
 
 go mod tidy
+
+make build
+
+make runlocal
+make publish
+
+docker run -p 80:80 andreytkach/go-mongo-webapi
+docker push andreytkach/go-mongo-webapi

@@ -6,3 +6,6 @@ run: build
 
 runlocal:
 	go run ./cmd/api/main.go
+
+publish: build
+	docker build -t andreytkach/go-mongo-webapi .

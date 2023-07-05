@@ -21,12 +21,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/auth/sign-up",
-					"protocol": "http",
+					"raw": "{{url}}/auth/sign-up",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8000",
 					"path": [
 						"auth",
 						"sign-up"
@@ -37,6 +35,30 @@
 		},
 		{
 			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"pm.test(\"Body has token\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"token\");\r",
+							"});\r",
+							"pm.test(\"Get token value\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.token).to.be.a(\"string\");\r",
+							"    pm.collectionVariables.set(\"token\", jsonData.token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -50,12 +72,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/auth/sign-in",
-					"protocol": "http",
+					"raw": "{{url}}/auth/sign-in",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8000",
 					"path": [
 						"auth",
 						"sign-in"
@@ -66,22 +86,47 @@
 		},
 		{
 			"name": "Get all Bookmarks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
-						"type": "text"
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"pm.test(\"Body has bookmarks\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"bookmarks\");\r",
+							"});\r",
+							"pm.test(\"Get bookmarks value\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.bookmarks).to.be.a(\"array\");\r",
+							"});"
+						],
+						"type": "text/javascript"
 					}
-				],
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/api/bookmarks",
-					"protocol": "http",
+					"raw": "{{url}}/api/bookmarks",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"bookmarks"
@@ -93,14 +138,18 @@
 		{
 			"name": "Create Bookmark",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n\t\"url\": \"https://github.com/andtkach\",\r\n\t\"title\": \"Go Clean Architecture example\"\r\n}",
@@ -111,12 +160,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/bookmarks",
-					"protocol": "http",
+					"raw": "{{url}}/api/bookmarks",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"bookmarks"
@@ -128,17 +175,21 @@
 		{
 			"name": "Update Bookmark",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"64a58565c01c835a1c5fb3ac\",\r\n\t\"url\": \"https://github.com/andtkach UPDATE\",\r\n\t\"title\": \"Go Clean Architecture example UPDATE\"\r\n}",
+					"raw": "{\r\n    \"id\": \"64a594afaaa4e6d483400ff6\",\r\n\t\"url\": \"https://github.com/andtkach UPDATE\",\r\n\t\"title\": \"Go Clean Architecture example UPDATE\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -146,12 +197,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/bookmarks",
-					"protocol": "http",
+					"raw": "{{url}}/api/bookmarks",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"bookmarks"
@@ -163,25 +212,27 @@
 		{
 			"name": "Get Bookmark",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/api/bookmarks/64a58565c01c835a1c5fb3ac",
-					"protocol": "http",
+					"raw": "{{url}}/api/bookmarks/64a594afaaa4e6d483400ff6",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"bookmarks",
-						"64a58565c01c835a1c5fb3ac"
+						"64a594afaaa4e6d483400ff6"
 					]
 				}
 			},
@@ -190,17 +241,21 @@
 		{
 			"name": "Delete Bookmark",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NTA4MTEuMTE3NzIwMSwidXNlciI6eyJJRCI6IjY0YTU3MjgzYzVjMzg3NWM1NDJjZmZhMyIsIlVzZXJuYW1lIjoiYW5kcmlpIiwiUGFzc3dvcmQiOiIyZjUwYmI4NmJmOTVhYjM0MmIyODk4N2UyZTkwODI2NjUyMTA3OWZlIn19.P2eap8oFSWNePyfHurZUQkt7APphf00kUuLp7d14uCk",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"id\": \"64a58565c01c835a1c5fb3ac\"\r\n} ",
+					"raw": "{\r\n\t\"id\": \"64a594afaaa4e6d483400ff6\"\r\n} ",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -208,12 +263,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/bookmarks",
-					"protocol": "http",
+					"raw": "{{url}}/api/bookmarks",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "8000",
 					"path": [
 						"api",
 						"bookmarks"
@@ -221,6 +274,38 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
 		}
 	]
 }
