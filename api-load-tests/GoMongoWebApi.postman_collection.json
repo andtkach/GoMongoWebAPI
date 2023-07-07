@@ -7,13 +7,53 @@
 	},
 	"item": [
 		{
-			"name": "Create user",
+			"name": "Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get user data\", function () {\r",
+							"    const body = JSON.parse(pm.request.body.raw);\r",
+							"    pm.collectionVariables.set(\"username\", body.username);\r",
+							"    pm.collectionVariables.set(\"password\", body.password);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Get user id value\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\");\r",
+							"    pm.expect(jsonData.username).to.be.a(\"string\");\r",
+							"    pm.collectionVariables.set(\"userid\", jsonData.id);    \r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"username\": \"andrii\",\r\n\t\"password\": \"password\"\r\n}",
+					"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"password\": \"{{$randomPassword}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -43,8 +83,8 @@
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
-							"pm.test(\"Response time is less than 200ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"pm.test(\"Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
 							"});\r",
 							"pm.test(\"Body has token\", function () {\r",
 							"    pm.expect(pm.response.text()).to.include(\"token\");\r",
@@ -64,7 +104,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"username\": \"andrii\",\r\n\t\"password\": \"password\"\r\n}",
+					"raw": "{\r\n\t\"username\": \"{{username}}\",\r\n\t\"password\": \"{{password}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -137,6 +177,28 @@
 		},
 		{
 			"name": "Create Bookmark",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Get bookmark id value\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.be.a(\"string\");\r",
+							"    pm.collectionVariables.set(\"bookmark\", jsonData.id);    \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -152,7 +214,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"url\": \"https://github.com/andtkach\",\r\n\t\"title\": \"Go Clean Architecture example\"\r\n}",
+					"raw": "{\r\n\t\"url\": \"{{$randomUrl}}\",\r\n\t\"title\": \"{{$randomLoremText}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -174,6 +236,23 @@
 		},
 		{
 			"name": "Update Bookmark",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -189,7 +268,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"64a594afaaa4e6d483400ff6\",\r\n\t\"url\": \"https://github.com/andtkach UPDATE\",\r\n\t\"title\": \"Go Clean Architecture example UPDATE\"\r\n}",
+					"raw": "{\r\n    \"id\": \"{{bookmark}}\",\r\n\t\"url\": \"{{$randomUrl}}\",\r\n\t\"title\": \"{{$randomLoremText}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -225,14 +304,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/api/bookmarks/64a594afaaa4e6d483400ff6",
+					"raw": "{{url}}/api/bookmarks/{{bookmark}}",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
 						"bookmarks",
-						"64a594afaaa4e6d483400ff6"
+						"{{bookmark}}"
 					]
 				}
 			},
@@ -240,6 +319,23 @@
 		},
 		{
 			"name": "Delete Bookmark",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -255,7 +351,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"id\": \"64a594afaaa4e6d483400ff6\"\r\n} ",
+					"raw": "{\r\n\t\"id\": \"{{bookmark}}\"\r\n} ",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -299,11 +395,31 @@
 	"variable": [
 		{
 			"key": "url",
-			"value": "http://localhost:8000",
+			"value": "https://webapp-gomongo.azurewebsites.net",
 			"type": "string"
 		},
 		{
 			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "bookmark",
+			"value": "64a7cc1ec68cd4acdee1be1a",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "{{$randomUserName}}",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "{{$randomPassword}}",
+			"type": "string"
+		},
+		{
+			"key": "userid",
 			"value": "",
 			"type": "string"
 		}

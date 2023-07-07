@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+
 	"github.com/andtkach/gomongowebapi/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -24,15 +25,15 @@ func NewUserRepository(db *mongo.Database, collection string) *UserRepository {
 	}
 }
 
-func (r UserRepository) CreateUser(ctx context.Context, user *models.User) error {
+func (r UserRepository) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
 	model := toMongoUser(user)
 	res, err := r.db.InsertOne(ctx, model)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	user.ID = res.InsertedID.(primitive.ObjectID).Hex()
-	return nil
+	return user, nil
 }
 
 func (r UserRepository) GetUser(ctx context.Context, username, password string) (*models.User, error) {

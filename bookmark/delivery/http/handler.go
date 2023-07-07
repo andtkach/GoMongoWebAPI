@@ -30,6 +30,10 @@ type createInput struct {
 	Title string `json:"title"`
 }
 
+type createResponse struct {
+	ID string `json:"id"`
+}
+
 func (h *Handler) Create(c *gin.Context) {
 	inp := new(createInput)
 	if err := c.BindJSON(inp); err != nil {
@@ -39,12 +43,15 @@ func (h *Handler) Create(c *gin.Context) {
 
 	user := c.MustGet(auth.CtxUserKey).(*models.User)
 
-	if err := h.useCase.CreateBookmark(c.Request.Context(), user, inp.URL, inp.Title); err != nil {
+	id, err := h.useCase.CreateBookmark(c.Request.Context(), user, inp.URL, inp.Title)
+	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, &createResponse{
+		ID: id,
+	})
 }
 
 type getResponse struct {

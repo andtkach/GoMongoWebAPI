@@ -8,8 +8,19 @@ export let options = {
 	insecureSkipTLSVerify: true,
 	noConnectionReuse: false,
 	vus: 10,
-	duration: '10s',
+	//duration: '10s',
+	stages: [
+		{ duration: '5s', target: 1 },
+		{ duration: '5s', target: 10 },
+		{ duration: '5s', target: 10 },
+		{ duration: '5s', target: 20 },
+		{ duration: '5s', target: 20 },
+		{ duration: '5s', target: 0 },
+	],
 };
+
+// const APIBASEURL = 'https://webapp-gomongo.azurewebsites.net';
+const APIBASEURL = 'http://localhost:81';
 
 export function setup() {
   console.log('Test setup');
@@ -22,9 +33,10 @@ export function setup() {
  	'username': username,
 	'password': password
   };
-  const res = http.post('https://webapp-gomongo.azurewebsites.net/auth/sign-in', JSON.stringify(body), options);
+  const resCrete = http.post(`${APIBASEURL}/auth/sign-up`, JSON.stringify(body), options);
+  const resLogin = http.post(`${APIBASEURL}/auth/sign-in`, JSON.stringify(body), options);
 
-  return { token: res.json().token };
+  return { token: resLogin.json().token };
 }
 
 
@@ -39,7 +51,7 @@ export default (data) => {
 		},
 	};
 	
-	const res = http.get('https://webapp-gomongo.azurewebsites.net/api/bookmarks', options);
+	const res = http.get(`${APIBASEURL}/api/bookmarks`, options);
 	check(res, {
 		'is status 200': (r) => r.status === 200,
 		'verify response body text': (r) => r.body.includes('bookmarks'),

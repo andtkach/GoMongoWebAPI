@@ -1,9 +1,10 @@
 package http
 
 import (
+	"net/http"
+
 	"github.com/andtkach/gomongowebapi/auth"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type Handler struct {
@@ -21,6 +22,11 @@ type signInput struct {
 	Password string `json:"password"`
 }
 
+type signUpResponse struct {
+	Id       string `json:"id"`
+	Username string `json:"username"`
+}
+
 func (h *Handler) SignUp(c *gin.Context) {
 	inp := new(signInput)
 
@@ -29,12 +35,13 @@ func (h *Handler) SignUp(c *gin.Context) {
 		return
 	}
 
-	if err := h.useCase.SignUp(c.Request.Context(), inp.Username, inp.Password); err != nil {
+	id, err := h.useCase.SignUp(c.Request.Context(), inp.Username, inp.Password)
+	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	c.Status(http.StatusOK)
+	c.JSON(http.StatusOK, signUpResponse{Id: id, Username: inp.Username})
 }
 
 type signInResponse struct {

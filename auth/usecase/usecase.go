@@ -4,16 +4,23 @@ import (
 	"context"
 	"crypto/sha1"
 	"fmt"
-	"github.com/andtkach/gomongowebapi/models"
 	"time"
+
+	"github.com/andtkach/gomongowebapi/models"
 
 	"github.com/andtkach/gomongowebapi/auth"
 	"github.com/dgrijalva/jwt-go/v4"
 )
 
+type UserInfo struct {
+	ID       string
+	Username string
+}
+
 type AuthClaims struct {
 	jwt.StandardClaims
-	User *models.User `json:"user"`
+	//User *models.User `json:"user"`
+	User *UserInfo `json:"user"`
 }
 
 type AuthUseCase struct {
@@ -36,7 +43,7 @@ func NewAuthUseCase(
 	}
 }
 
-func (a *AuthUseCase) SignUp(ctx context.Context, username, password string) error {
+func (a *AuthUseCase) SignUp(ctx context.Context, username, password string) (string, error) {
 	pwd := sha1.New()
 	pwd.Write([]byte(password))
 	pwd.Write([]byte(a.hashSalt))
@@ -46,7 +53,12 @@ func (a *AuthUseCase) SignUp(ctx context.Context, username, password string) err
 		Password: fmt.Sprintf("%x", pwd.Sum(nil)),
 	}
 
-	return a.userRepo.CreateUser(ctx, user)
+	user, err := a.userRepo.CreateUser(ctx, user)
+	if err != nil {
+		return "", auth.ErrUserNotFound
+	}
+
+	return user.ID, nil
 }
 
 func (a *AuthUseCase) SignIn(ctx context.Context, username, password string) (string, error) {
@@ -61,9 +73,14 @@ func (a *AuthUseCase) SignIn(ctx context.Context, username, password string) (st
 	}
 
 	claims := AuthClaims{
-		User: user,
+		//User: user,
+		User: &UserInfo{
+			ID:       user.ID,
+			Username: user.Username,
+		},
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: jwt.At(time.Now().Add(a.expireDuration)),
+			Issuer:    "GoMongoWebApiServer",
 		},
 	}
 
@@ -85,7 +102,12 @@ func (a *AuthUseCase) ParseToken(ctx context.Context, accessToken string) (*mode
 	}
 
 	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
-		return claims.User, nil
+
+		return &models.User{
+			ID:       claims.User.ID,
+			Username: claims.User.Username,
+			Password: "",
+		}, nil
 	}
 
 	return nil, auth.ErrInvalidAccessToken

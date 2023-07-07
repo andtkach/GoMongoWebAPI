@@ -26,18 +26,18 @@ func NewBookmarkRepository(db *mongo.Database, collection string) *BookmarkRepos
 	}
 }
 
-func (r BookmarkRepository) CreateBookmark(ctx context.Context, user *models.User, bm *models.Bookmark) error {
+func (r BookmarkRepository) CreateBookmark(ctx context.Context, user *models.User, bm *models.Bookmark) (string, error) {
 	bm.UserID = user.ID
 
 	model := toModel(bm)
 
 	res, err := r.db.InsertOne(ctx, model)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	bm.ID = res.InsertedID.(primitive.ObjectID).Hex()
-	return nil
+	return bm.ID, nil
 }
 
 func (r BookmarkRepository) GetBookmarks(ctx context.Context, user *models.User) ([]*models.Bookmark, error) {

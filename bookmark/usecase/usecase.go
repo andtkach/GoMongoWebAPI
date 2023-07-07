@@ -17,7 +17,7 @@ func NewBookmarkUseCase(bookmarkRepo bookmark.Repository) *BookmarkUseCase {
 	}
 }
 
-func (b BookmarkUseCase) CreateBookmark(ctx context.Context, user *models.User, url, title string) error {
+func (b BookmarkUseCase) CreateBookmark(ctx context.Context, user *models.User, url, title string) (string, error) {
 	bm := &models.Bookmark{
 		URL:   url,
 		Title: title,
