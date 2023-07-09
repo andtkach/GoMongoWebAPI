@@ -134,4 +134,3 @@ make publish
 
 docker run -p 80:80 andreytkach/go-mongo-webapi
 docker push andreytkach/go-mongo-webapi
-

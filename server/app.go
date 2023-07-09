@@ -2,15 +2,16 @@ package server
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/andtkach/gomongowebapi/auth"
 	"github.com/andtkach/gomongowebapi/bookmark"
@@ -54,6 +55,14 @@ func (a *App) Run(port string) error {
 		gin.Recovery(),
 		gin.Logger(),
 	)
+	gin.SetMode(gin.ReleaseMode)
+
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"alive":   true,
+			"version": 0.4,
+		})
+	})
 
 	// Set up http handlers
 	// SignUp/SignIn endpoints
@@ -109,6 +118,8 @@ func initDB() *mongo.Database {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Println("Connection to mongoDB started")
 
 	return client.Database(viper.GetString("mongo.name"))
 }
